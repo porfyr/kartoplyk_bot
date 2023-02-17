@@ -77,7 +77,8 @@ async def send(message: types.Message):
         except:
             await message.answer("Невідома помилка модуля send, пишіть розрабу або тому хто його знає")
         else:
-            print("текст:\n>"+text+"\n")
+            print("текст:\n>"+text)
+            print("Отвєт:"+response['choices'][0]['text']+"\n")
             # print(response)
     elif text != "488" and parameter == "--noprefix":
         chat_name = message.chat.title if message.chat.title != None else "пп"
@@ -90,7 +91,8 @@ async def send(message: types.Message):
         except:
             await message.answer("Невідома помилка модуля send, пишіть розрабу або тому хто його знає")
         else:
-            print("текст:\n>"+text+"\n")
+            print("текст:\n>"+text)
+            print("Отвєт:"+response['choices'][0]['text']+"\n")
             # print(response)
     else:
         print("не канає")
