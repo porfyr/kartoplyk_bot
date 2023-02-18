@@ -4,8 +4,8 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 import aiohttp
 
-token = "<токен бота>"
-openai.api_key = "<токен openai>"
+token = "<>"
+openai.api_key = "<>"
 proxy_url = "http://proxy.server:3128"
 GET_IP_URL = 'http://bot.whatismyipaddress.com/'
 bot = Bot(token=token, proxy=proxy_url)
@@ -51,48 +51,58 @@ def get_openai_responce(text):
 async def echo(message: types.Message):
     # ip = await fetch(GET_IP_URL)
     # ip = await fetch(GET_IP_URL, bot.proxy, bot.proxy_auth)
-    await message.answer("Я тутай")
+    await message.answer("На связі")
     try:
         response = get_openai_responce("hehe")
     except openai.error.AuthenticationError:
         await message.answer("Виплюнувся токен openai")
-    except:
-        await message.answer("Невідома помилка команди /ty_de, пишіть розрабу або тому хто його знає")
+    except RuntimeWarning:
+            await message.answer("Перевикористано токен openai, потрібно вставити новий з іншого акаунта")
+    except Exception as e:
+        await message.answer("Хз чому не роблю, будіть розраба")
+        print("\n!{")
+        print(e)
+        print("}!\n")
+        _response = get_openai_responce("hehe")
+
     print("на связі))")
 
 
 
 # main message handler #
 @dp.message_handler()
-async def send(message: types.Message):
+async def reaction(message: types.Message):
     (parameter, text) = get_text(message.text)
     if text != "488" and parameter == "--force_ua":
         chat_name = message.chat.title if message.chat.title != None else "пп"
-        print("\nПослано запит на openai API ...        ", message.from_user.full_name, "@"+message.from_user.username, "|", chat_name)
+        print("\nПослано запит на openai API ...        ", message.from_id, str(message.from_user.full_name), "@"+str(message.from_user.username), "|", str(chat_name))
+        print("текст: "+text)
         try:
             response = get_openai_responce( "дай відповідь українською мовою, "+text )
             await message.answer(response['choices'][0]['text'])
         except openai.error.AuthenticationError:
             await message.answer("Сервер сплюнув токен, пишіть розрабу чи тому хто його знає щоб вставив новий")
+        except RuntimeWarning:
+            await message.answer("Швидше всього перевикористано токен openai, потрібно вставити новий з іншого акаунта")
         except:
-            await message.answer("Невідома помилка модуля send, пишіть розрабу або тому хто його знає")
+            await message.answer("В такому разі хз чому не робе, будіть розраба")
         else:
-            print("текст:\n>"+text)
+            print("текст: "+text)
             print("Отвєт:"+response['choices'][0]['text']+"\n")
             # print(response)
     elif text != "488" and parameter == "--noprefix":
         chat_name = message.chat.title if message.chat.title != None else "пп"
-        print("\nПослано --noprefix запит на openai API ...        ", message.from_user.full_name, "@"+message.from_user.username, "|", chat_name)
+        print("\nПослано --noprefix запит на openai API ...        ", message.from_id, str(message.from_user.full_name), "@"+str(message.from_user.username), "|", str(chat_name))
+        print("текст: >"+text)
         try:
             response = get_openai_responce( text )
             await message.answer(response['choices'][0]['text'])
         except openai.error.AuthenticationError:
             await message.answer("Сервер сплюнув токен, пишіть розрабу чи тому хто його знає щоб вставив новий")
+        except RuntimeWarning:
+            await message.answer("Швидше всього перевикористано токен openai, потрібно вставити новий з іншого акаунта")
         except:
-            await message.answer("Невідома помилка модуля send, пишіть розрабу або тому хто його знає")
-        else:
-            print("текст:\n>"+text)
-            print("Отвєт:"+response['choices'][0]['text']+"\n")
+            await message.answer("Хз чому не роблю, будіть розраба")
             # print(response)
     else:
         print("не канає")
