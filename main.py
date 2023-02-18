@@ -88,7 +88,7 @@ async def reaction(message: types.Message):
             await message.answer("В такому разі хз чому не робе, будіть розраба")
         else:
             print("текст: "+text)
-            print("Отвєт:"+response['choices'][0]['text']+"\n")
+            print("Отвєт:"+response['choices'][0]['text'][1:]+"\n")
             # print(response)
     elif text != "488" and parameter == "--noprefix":
         chat_name = message.chat.title if message.chat.title != None else "пп"
@@ -103,6 +103,10 @@ async def reaction(message: types.Message):
             await message.answer("Швидше всього перевикористано токен openai, потрібно вставити новий з іншого акаунта")
         except:
             await message.answer("Хз чому не роблю, будіть розраба")
+            # print(response)
+        else:
+            print("текст: "+text)
+            print("Отвєт:"+response['choices'][0]['text'][1:]+"\n")
             # print(response)
     else:
         print("не канає")
