@@ -81,7 +81,7 @@ async def reaction(message: types.Message):
     prefix = "дай відповідь українською мовою, " if parameter == "--force_ua" else ""
     if text != "488":
         chat_name = message.chat.title if message.chat.title != None else "пп"
-        print("\nПослано "+(parameter if parameter == "--noprefix" else "")+" запит на openai API ...        ", str(chat_name), "|", datetime.datetime.now().strftime("%m.%d %H:%M:%S"))
+        print("\nПослано "+(parameter if parameter == "--noprefix " else "")+"запит на openai API ...        ", str(chat_name), "|", datetime.datetime.now().strftime("%m.%d %H:%M:%S"))
         print("текст: "+text)
         try:
             response = get_openai_responce(prefix+text)
