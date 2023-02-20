@@ -5,9 +5,6 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 
-def do_nothing():
-    _a = 0
-    # yes I'm pro ebat
 
 token = "<>"
 openai.api_key = "<>"
