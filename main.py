@@ -28,8 +28,8 @@ def get_text(message: types.Message):
         return ("--force_ua", text[12:].strip())
     elif text[:10] == "Картоплик ":
         return ("--force_ua", text[10:].strip())
-    elif text[:10] == ":noprefix ":
-        return ("--noprefix", text[10:].strip())
+    elif text[:6] == ":nopr ":
+        return ("--noprefix", text[6:].strip())
     elif message.chat.type == "private":
         return ("--force_ua", text.strip())
     elif message.reply_to_message != None and message.reply_to_message.from_user.username == "kartoplyk_bot":
@@ -92,8 +92,11 @@ async def reaction(message: types.Message):
             await message.answer("Сервер сплюнув токен, пишіть розрабу чи тому хто його знає щоб вставив новий")
         except RuntimeWarning:
             await message.answer("Швидше всього перевикористано токен openai, потрібно вставити новий з іншого акаунта")
-        except:
-            await message.answer("В такому разі хз чому не робе, будіть розраба")
+        #except internal_error:
+        #    message.answer("Шось з серверами openai")
+        except Exception as e:
+            await message.answer("В такому разі хз чому не робе, може лягли сервери openai")
+            print(e)
         else:
             d_time = round((datetime.datetime.now() - t0).total_seconds())
             print("\n"+"текст: "+text)
