@@ -99,7 +99,7 @@ async def reaction(message: types.Message):
             print(e)
         else:
             d_time = round((datetime.datetime.now() - t0).total_seconds())
-            print("\n"+"текст: "+text)
+            print("текст: "+text)
             print("Отвєт:", response['choices'][0]['text'][1:]+"\n"+"Δ", str(d_time)+"s"+"\n")
     else:
         print("не канає")
