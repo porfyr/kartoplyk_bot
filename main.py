@@ -58,20 +58,24 @@ def get_openai_responce(text):
 async def echo(message: types.Message):
     # ip = await fetch(GET_IP_URL)
     # ip = await fetch(GET_IP_URL, bot.proxy, bot.proxy_auth)
-    await message.answer("На связі")
     try:
         _ = get_openai_responce("hehe")
     except openai.error.AuthenticationError:
-        await message.answer("Виплюнувся токен openai")
-    except RuntimeWarning:
-            await message.answer("Перевикористано токен openai, потрібно вставити новий з іншого акаунту")
-    except Exception as e:
-        await message.answer("Хз чому не роблю, будіть розраба")
-        print("\n!{")
-        print(e)
-        print("}!\n")
+        await message.answer("Всталено лєвий токен, розробник накосячив")
+    except openai.error.RateLimitError:
+        await message.answer("Скінчився токен openai, потрібно надати новий з іншого акаунта")
+        # print("openai.error.RateLimitError: You exceeded your current quota, please check your plan and billing details.")
         _ = get_openai_responce("hehe")
-    print("на связі))")
+    except RuntimeWarning:
+        await message.answer("Рантайм еrrоr курва мать")
+        _ = get_openai_responce("hehe")
+    except Exception:
+        message.answer("Хз чому не роблю, будіть розраба")
+        _ = get_openai_responce("hehe")
+    else:
+        await message.answer("На связі")
+        print("на связі))")
+        _ = get_openai_responce("hehe")
 
 
 
@@ -80,7 +84,7 @@ async def echo(message: types.Message):
 async def reaction(message: types.Message):
     (parameter, text) = get_text(message)
     t0 = datetime.datetime.now()
-    prefix = "дай відповідь українською мовою, " if parameter == "--force_ua" else ""
+    prefix = "за можливості дай відповідь українською мовою, " if parameter == "--force_ua" else ""
     if text != "488":
         chat_name = message.chat.title if message.chat.title != None else "пп"
         print("\nПослано "+(parameter+" " if parameter == "--noprefix" else "")+"запит на openai API ...        ", str(chat_name), "|", datetime.datetime.now().strftime("%m.%d %H:%M:%S"))
@@ -89,18 +93,27 @@ async def reaction(message: types.Message):
             response = get_openai_responce(prefix+text)
             await message.reply(response['choices'][0]['text'])
         except openai.error.AuthenticationError:
-            await message.answer("Сервер сплюнув токен, пишіть розрабу чи тому хто його знає щоб вставив новий")
+            await message.answer("Всталено лєвий токен, розробник накосячив")
+            _ = get_openai_responce("hehe")
         except RuntimeWarning:
-            await message.answer("Швидше всього перевикористано токен openai, потрібно вставити новий з іншого акаунта")
+            await message.answer("Рантайм еrrоr курва мать")
+            _ = get_openai_responce("hehe")
+        except openai.error.RateLimitError:
+            await message.answer("Скінчився токен openai, потрібно надати новий з іншого акаунта")
+            # print("openai.error.RateLimitError: You exceeded your current quota, please check your plan and billing details.")
+            _ = get_openai_responce("hehe")
         #except internal_error:
         #    message.answer("Шось з серверами openai")
-        except Exception as e:
-            await message.answer("В такому разі хз чому не робе, може лягли сервери openai")
-            print(e)
+        except Exception:
+            await message.answer("В такому разі хз чому не робе, може відійшли покурити сервери openai")
+            print("на связі))")
+            #print(e)
+            _ = get_openai_responce("hehe")
         else:
             d_time = round((datetime.datetime.now() - t0).total_seconds())
             print("текст: "+text)
             print("Отвєт:", response['choices'][0]['text'][1:]+"\n"+"Δ", str(d_time)+"s"+"\n")
+            _ = get_openai_responce("hehe")
     else:
         print("не канає")
 
